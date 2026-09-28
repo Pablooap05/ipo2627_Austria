@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="geometric" data-piece-size="medium">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyecto Tablero - Juego de Fichas NxN</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  
+  <header class="app-header">
+    <h1 style="font-size: 1.4rem;" data-header-title="true">❖ Tablero 4x4</h1>
+    <div style="display: flex; gap: 0.5rem;">
+      <button class="btn btn-secondary" data-action="help">❓ Ayuda</button>
+      <button class="btn" data-action="new-game">🔄 Nueva Partida</button>
+    </div>
+  </header>
+
+ 
+  <section class="assistant-banner" data-assistant="true">
+    🤖 ¡Bienvenido! Organiza las fichas para que cada fila sea del mismo tipo.
+  </section>
+
+  
+  <main class="main-layout">
+
+    
+    <aside class="controls-sidebar">
+      <h3>Configuración</h3>
+
+      <div class="control-field">
+        <div class="control-label">
+          <span>Dimensión Tablero (N)</span>
+          <span data-value="grid-size">4x4</span>
+        </div>
+        <input type="range" class="range-input" min="3" max="8" value="4" data-control="grid-size">
+      </div>
+
+      <div class="control-field">
+        <span class="control-label">Tamaño de Fichas</span>
+        <div style="display: flex; gap: 4px;">
+          <button class="btn btn-secondary" style="flex:1;" data-control="piece-size" data-size="small">Pequeña</button>
+          <button class="btn btn-secondary" style="flex:1;" data-control="piece-size" data-size="medium">Mediana</button>
+          <button class="btn btn-secondary" style="flex:1;" data-control="piece-size" data-size="large">Grande</button>
+        </div>
+      </div>
+
+      <div class="control-field">
+        <span class="control-label">Aspecto y Color</span>
+        <select class="select-input" data-control="theme">
+          <option value="geometric">Geométrico (Círculo, Cuadrado, Triángulo)</option>
+          <option value="jewels">Gemas (Diamante, Hexágono, Esfera)</option>
+          <option value="cosmic">Cósmico (Estrella, Sol, Luna)</option>
+        </select>
+      </div>
+
+      <button class="btn" data-action="new-game" style="margin-top: 0.5rem;">🎮 Reiniciar Tablero</button>
+    </aside>
+
+    
+    <section class="board-area">
+
+      
+      <div class="stats-bar">
+        <div>Movimientos: <strong data-moves="true">0</strong></div>
+        <div>Filas Completas: <strong data-solved="true">0</strong> / <strong data-total="true">4</strong></div>
+      </div>
+
+      
+      <div class="board-wrapper">
+        
+        <div class="row-indicators" data-indicators="true"></div>
+
+        
+        <div class="board-grid" data-grid="true"></div>
+      </div>
+
+    </section>
+
+  </main>
+
+  
+  <div class="modal-overlay" data-modal="help">
+    <div class="modal-card">
+      <h3 style="margin-bottom: 0.8rem;">📖 Mecánica del Juego</h3>
+      <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-muted); margin-bottom: 1rem;">
+        - <strong>Movimiento:</strong> Arrastra y suelta (Drag & Drop) fichas entre dos celdas para intercambiarlas.<br>
+        - <strong>Objetivo:</strong> Consigue que todas las fichas de cada fila sean exactamente del mismo tipo.<br>
+        - <strong>Personalización:</strong> Cambia la dimensión N (N≥3), tamaño y aspecto desde el panel lateral.
+      </p>
+      <button class="btn" data-action="close-help">Entendido</button>
+    </div>
+  </div>
+
+  
+  <div class="modal-overlay" data-modal="win">
+    <div class="modal-card" style="text-align: center;">
+      <h2 style="font-size: 1.6rem; margin-bottom: 0.5rem;">🎉 ¡Victoria!</h2>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">Has completado el tablero en <strong data-win-moves="true" style="color: var(--accent);">0</strong> movimientos.</p>
+      <button class="btn" data-action="new-game">🎮 Jugar Otra Vez</button>
+    </div>
+  </div>
+
+  
+  <script type="module">
+    import { BoardModel } from './js/model.js';
+    import { BoardView } from './js/view.js';
+    import { GameController } from './js/controller.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const model = new BoardModel(4, 'medium', 'geometric');
+      const view = new BoardView();
+      new GameController(model, view);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lector de sonetos clásicos de la poesía española: Quevedo, Garcilaso de la Vega, Góngora y Lope de Vega">
+
+  <title>Sonetos — Lector de poesía clásica española</title>
+
+  <!-- Google Fonts: Playfair Display (display) + Cormorant Garamond (cuerpo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+
+  <!-- Hojas de estilo separadas por responsabilidad -->
+  <link rel="stylesheet" href="css/spatial.css">
+  <link rel="stylesheet" href="css/chromatic.css">
+  <link rel="stylesheet" href="css/typographic.css">
+
+  <!-- Punto de entrada JS (módulo ES) -->
+  <script type="module" src="js/controller.js"></script>
+</head>
+<body>
+
+  <!-- ================================================================== -->
+  <!-- HEADER                                                             -->
+  <!-- ================================================================== -->
+  <header class="app-header">
+    <h1 class="app-title">Sonetos</h1>
+    <p class="app-subtitle">Poesía clásica española</p>
+  </header>
+
+  <!-- ================================================================== -->
+  <!-- MAIN                                                               -->
+  <!-- ================================================================== -->
+  <main class="app-main">
+
+    <!-- Vista: Galería de sonetos -->
+    <section id="gallery" class="view view-visible" aria-label="Galería de sonetos">
+      <h2 class="section-heading">Escoge un soneto</h2>
+      <ul class="gallery-list" role="list">
+        <!-- Poblado dinámicamente por view.js -->
+      </ul>
+    </section>
+
+    <!-- Vista: Lectura del soneto -->
+    <section id="reader" class="view view-hidden" aria-label="Lectura del soneto">
+      <nav class="reader-nav">
+        <button class="back-button" aria-label="Volver a la galería">
+          <span class="back-icon" aria-hidden="true">←</span>
+          <span>Volver</span>
+        </button>
+      </nav>
+      <article class="sonnet-article">
+        <!-- Poblado dinámicamente por view.js -->
+      </article>
+    </section>
+
+  </main>
+
+  <!-- ================================================================== -->
+  <!-- FOOTER                                                             -->
+  <!-- ================================================================== -->
+  <footer class="app-footer">
+    <p>Sonetos del Siglo de Oro español</p>
+  </footer>
+
+</body>
+</html>
