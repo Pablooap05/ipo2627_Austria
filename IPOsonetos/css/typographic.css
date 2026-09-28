@@ -1,138 +1,23 @@
-/* ==========================================================================
-   Diseño Tipográfico — Dos fuentes contrastadas
-   
-   Display: Playfair Display  (serif didona — alto contraste de trazos)
-   Cuerpo:  Cormorant Garamond (serif humanista — legibilidad clásica)
-   
-   Estrategia: contraste entre la elegancia puntiaguda de Playfair para
-   los títulos y la suavidad humanista de Cormorant para los versos,
-   reflejando la dualidad forma-contenido del soneto.
-   
-   Escala fluida con clamp() para adaptación tipográfica sin breakpoints.
-   ========================================================================== */
-
+/* 2 tipos de letra : Lora e Inter*/
 :root {
-  /* --- Familias tipográficas --- */
-  --ff-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --ff-body:    'Cormorant Garamond', Garamond, 'Times New Roman', serif;
-
-  /* --- Escala tipográfica fluida --- */
-  --fs-hero:    clamp(1.8rem, 4vw, 2.8rem);
-  --fs-title:   clamp(1.4rem, 3vw, 2rem);
-  --fs-heading: clamp(0.85rem, 1.5vw, 1rem);
-  --fs-verse:   clamp(1.05rem, 2vw, 1.25rem);
-  --fs-meta:    0.9375rem;
-  --fs-small:   0.8125rem;
-  --fs-button:  1rem;
-
-  /* --- Interlineados --- */
-  --lh-tight:   1.2;
-  --lh-normal:  1.5;
-  --lh-loose:   1.85;
+  --ff-poetry: 'Lora', sans-serif;
+  --ff-ui: 'Inter', sans-serif;
+  --scale: 1;
 }
 
+body { font-family: var(--ff-ui); }
 
-/* --- Tipografía base ---------------------------------------------------- */
+.app-header h1 { font-family: var(--ff-poetry); font-size: 2.2rem; }
+.app-header p { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; }
 
-body {
-  font-family: var(--ff-body);
-  font-size: 1rem;
-  line-height: var(--lh-normal);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-
-/* --- Header ------------------------------------------------------------- */
-
-.app-title {
-  font-family: var(--ff-display);
-  font-size: var(--fs-hero);
-  font-weight: 700;
-  line-height: var(--lh-tight);
-  letter-spacing: 0.02em;
-}
-
-.app-subtitle {
-  font-family: var(--ff-body);
-  font-size: var(--fs-meta);
-  font-weight: 400;
-  font-style: italic;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-
-/* --- Galería ------------------------------------------------------------ */
-
-.section-heading {
-  font-family: var(--ff-body);
-  font-size: var(--fs-heading);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-}
-
-.gallery-title {
-  font-family: var(--ff-display);
-  font-size: var(--fs-title);
-  font-weight: 700;
-  line-height: var(--lh-tight);
-}
-
-.gallery-author {
-  font-family: var(--ff-body);
-  font-size: var(--fs-meta);
-  font-weight: 400;
-  font-style: italic;
-}
-
-
-/* --- Soneto (lectura) --------------------------------------------------- */
-
-.sonnet-title {
-  font-family: var(--ff-display);
-  font-size: var(--fs-title);
-  font-weight: 700;
-  line-height: var(--lh-tight);
-}
-
-.sonnet-author {
-  font-family: var(--ff-body);
-  font-size: var(--fs-meta);
-  font-weight: 500;
-  font-style: italic;
-  letter-spacing: 0.03em;
-}
+.gallery-title, .sonnet-title { font-family: var(--ff-poetry); font-size: 1.4rem; }
+.sonnet-author { font-family: var(--ff-poetry); font-style: italic; }
 
 .verse {
-  font-family: var(--ff-body);
-  font-size: var(--fs-verse);
-  font-weight: 400;
-  line-height: var(--lh-loose);
+  font-family: var(--ff-poetry);
+  font-size: calc(1.15rem * var(--scale));
+  line-height: 1.8;
 }
 
-
-/* --- Botones ------------------------------------------------------------ */
-
-.back-button {
-  font-family: var(--ff-body);
-  font-size: var(--fs-button);
-  font-weight: 500;
-  letter-spacing: 0.03em;
-}
-
-.gallery-button {
-  font-family: inherit;
-  text-align: left;
-}
-
-
-/* --- Footer ------------------------------------------------------------- */
-
-.app-footer {
-  font-family: var(--ff-body);
-  font-size: var(--fs-small);
-  font-style: italic;
-  letter-spacing: 0.05em;
-}
+.stanza-badge, button { font-family: var(--ff-ui); font-size: 0.8rem; font-weight: 500; }
+.verse-num { font-family: var(--ff-ui); font-size: 0.75rem; }

@@ -1,163 +1,34 @@
-/* ==========================================================================
-   Diseño Cromático — Estrategia Complementaria
-   
-   Paleta: Índigo profundo (fondo) + Ámbar dorado (acento)
-   Inspiración: tinta sobre pergamino, lectura nocturna a la luz de velas.
-   
-   Todos los colores se definen como custom properties en :root.
-   Ningún otro fichero CSS emplea colores literales.
-   ========================================================================== */
-
 :root {
-  /* --- Fondos --- */
-  --clr-bg:            hsl(234, 30%, 8%);
-  --clr-surface:       hsl(234, 25%, 13%);
-  --clr-surface-high:  hsl(234, 20%, 18%);
-
-  /* --- Bordes --- */
-  --clr-border:        hsl(234, 15%, 22%);
-  --clr-border-accent: hsl(38, 50%, 30%);
-
-  /* --- Texto --- */
-  --clr-text:          hsl(40, 25%, 88%);
-  --clr-text-muted:    hsl(234, 10%, 55%);
-  --clr-text-subtle:   hsl(234, 10%, 40%);
-
-  /* --- Acentos (complementarios) --- */
-  --clr-accent:        hsl(38, 75%, 55%);
-  --clr-accent-glow:   hsl(38, 80%, 65%);
-  --clr-accent-dim:    hsl(38, 60%, 40%);
-  --clr-complement:    hsl(218, 55%, 50%);
-
-  /* --- Sombras --- */
-  --shadow-sm:  0  1px  3px hsla(234, 50%, 5%, 0.4);
-  --shadow-md:  0  4px 12px hsla(234, 50%, 5%, 0.5);
-  --shadow-lg:  0  8px 30px hsla(234, 50%, 5%, 0.6);
+  --bg: #12151c;
+  --surface: #1a1e29;
+  --border: #282e3d;
+  --text: #f0e6e8;
+  --muted: #8e95a5;
+  --accent: #e03652;
+  --accent-bg: rgba(224, 54, 82, 0.12);
 }
 
+body { background: var(--bg); color: var(--text); }
+.app-header h1, .sonnet-title, .gallery-title { color: var(--accent); }
+.app-header p, .gallery-author, .sonnet-author, .verse-num { color: var(--muted); }
 
-/* --- Fondos generales --------------------------------------------------- */
-
-body {
-  background-color: var(--clr-bg);
-  color: var(--clr-text);
+.gallery-btn, .sonnet-card, #btn-back, .font-sizer button {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  transition: all 0.2s ease;
 }
 
-
-/* --- Header ------------------------------------------------------------- */
-
-.app-header {
-  border-bottom: 1px solid var(--clr-border);
+.gallery-btn:hover, #btn-back:hover, .font-sizer button:hover {
+  border-color: var(--accent);
 }
 
-.app-title {
-  color: var(--clr-accent);
+.stanza.is-focused {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-bg);
 }
 
-.app-subtitle {
-  color: var(--clr-text-muted);
-}
-
-
-/* --- Galería ------------------------------------------------------------ */
-
-.section-heading {
-  color: var(--clr-text-muted);
-}
-
-.gallery-button {
-  background-color: var(--clr-surface);
-  border: 1px solid var(--clr-border);
-  box-shadow: var(--shadow-sm);
-  color: var(--clr-text);
-  transition:
-    background-color 0.3s ease,
-    border-color     0.3s ease,
-    box-shadow       0.3s ease,
-    transform        0.3s ease;
-}
-
-.gallery-button:hover {
-  background-color: var(--clr-surface-high);
-  border-color: var(--clr-accent-dim);
-  box-shadow: var(--shadow-md);
-}
-
-.gallery-button:focus-visible {
-  outline: 2px solid var(--clr-accent);
-  outline-offset: 3px;
-}
-
-.gallery-button:active {
-  background-color: var(--clr-surface);
-  box-shadow: var(--shadow-sm);
-}
-
-.gallery-title {
-  color: var(--clr-accent);
-}
-
-.gallery-author {
-  color: var(--clr-text-muted);
-}
-
-
-/* --- Lector (Reader) ---------------------------------------------------- */
-
-.sonnet-article {
-  background-color: var(--clr-surface);
-  border: 1px solid var(--clr-border);
-  box-shadow: var(--shadow-lg);
-}
-
-.sonnet-title {
-  color: var(--clr-accent);
-}
-
-.sonnet-author {
-  color: var(--clr-text-muted);
-}
-
-.verse {
-  color: var(--clr-text);
-}
-
-/* Línea decorativa bajo el título del soneto */
-.sonnet-title::after {
-  background: linear-gradient(
-    90deg,
-    var(--clr-accent),
-    var(--clr-complement),
-    transparent
-  );
-}
-
-
-/* --- Botón de retorno --------------------------------------------------- */
-
-.back-button {
-  background-color: transparent;
-  border: 1px solid var(--clr-border);
-  color: var(--clr-text-muted);
-  transition:
-    color        0.3s ease,
-    border-color 0.3s ease;
-}
-
-.back-button:hover {
-  color: var(--clr-accent);
-  border-color: var(--clr-accent-dim);
-}
-
-.back-button:focus-visible {
-  outline: 2px solid var(--clr-accent);
-  outline-offset: 3px;
-}
-
-
-/* --- Footer ------------------------------------------------------------- */
-
-.app-footer {
-  border-top: 1px solid var(--clr-border);
-  color: var(--clr-text-subtle);
+.stanza-badge {
+  color: var(--accent);
+  background: rgba(224, 54, 82, 0.1);
 }
