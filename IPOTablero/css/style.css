@@ -1,0 +1,489 @@
+/* ==========================================================================
+   STYLE.CSS - Centered Board Layout (Zero Scroll & Clean Controls)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  
+  /* Sistema Cromático: Slate Oscuro y Acentos */
+  --bg-dark: #0f172a;
+  --bg-panel: rgba(30, 41, 59, 0.75);
+  --bg-cell: rgba(51, 65, 85, 0.4);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent: #38bdf8;
+  --border: rgba(255, 255, 255, 0.1);
+  
+  /* Control Dinámico del Tablero */
+  --N: 4;
+  --board-gap: 6px;
+  --max-cell-size: 52px;
+  /* Calcula el tamaño de celda para que el tablero 6x6 quepa sin scroll (250px para header+controls) */
+  --cell-size: clamp(22px, min(var(--max-cell-size), calc((100vh - 260px) / var(--N))), 64px);
+
+  /* Fichas: 3 tipos distinguibles por forma y color */
+  --type-0-color: linear-gradient(135deg, #ff416c, #ff4b2b); /* Círculo Rojo */
+  --type-1-color: linear-gradient(135deg, #00b4db, #0083b0); /* Cuadrado Azul */
+  --type-2-color: linear-gradient(135deg, #11998e, #38ef7d); /* Triángulo Verde */
+}
+
+/* Modificadores de Magnitud de Fichas */
+[data-piece-size="small"]  { --max-cell-size: 36px; --board-gap: 5px; }
+[data-piece-size="medium"] { --max-cell-size: 52px; --board-gap: 7px; }
+[data-piece-size="large"]  { --max-cell-size: 62px; --board-gap: 8px; }
+
+/* Reset Global & Prevención Total de Scroll */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-dark);
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 1rem;
+  background-image: radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.12), transparent 60%);
+}
+
+/* ==========================================================================
+   TOP BAR (SIN TÍTULO, COMPACTO Y FUNCIONAL)
+   ========================================================================== */
+.app-header {
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-panel);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.65rem 1.25rem;
+  margin-bottom: 0.6rem;
+  flex-shrink: 0;
+  gap: 1rem;
+}
+
+.assistant-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.86rem;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.assistant-icon {
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   ESCENARIO PRINCIPAL (TABLERO EN EL CENTRO)
+   ========================================================================== */
+.game-stage {
+  width: 100%;
+  max-width: 960px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 auto;
+}
+
+.board-area {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 0.6rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  position: relative;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+/* Barra de Estadísticas */
+.stats-bar {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-size: 0.88rem;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 0.35rem 1.2rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.stats-divider {
+  color: var(--border);
+  font-weight: 300;
+}
+
+/* Envoltorio del Tablero e Indicadores */
+.board-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 2.8rem 0.4rem 0.4rem;
+  max-width: 100%;
+}
+
+/* Grid NxN */
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--N), var(--cell-size));
+  grid-template-rows: repeat(var(--N), var(--cell-size));
+  gap: var(--board-gap);
+  user-select: none;
+}
+
+/* Celdas del Tablero */
+.board-cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background: var(--bg-cell);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.board-cell.drag-over {
+  background: rgba(56, 189, 248, 0.3) !important;
+  border: 2px dashed var(--accent) !important;
+}
+
+.board-cell.selected {
+  border: 2px solid #f59e0b !important;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+
+/* Fichas */
+.piece {
+  width: 80%;
+  height: 80%;
+  cursor: grab;
+  transition: transform 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: calc(var(--cell-size) * 0.35);
+  color: #fff;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+.piece:active { cursor: grabbing; }
+.piece.dragging { opacity: 0.3; }
+
+/* Formas y Colores - Tema Geométrico */
+.piece[data-type="0"] {
+  background: var(--type-0-color);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(255, 65, 108, 0.4);
+}
+
+.piece[data-type="1"] {
+  background: var(--type-1-color);
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 180, 219, 0.4);
+}
+
+.piece[data-type="2"] {
+  background: var(--type-2-color);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  border-radius: 0;
+  box-shadow: 0 2px 6px rgba(56, 239, 125, 0.4);
+}
+
+/* Modificaciones de Forma - Tema Gemas */
+[data-theme="jewels"] .piece[data-type="0"] { clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); border-radius: 0; }
+[data-theme="jewels"] .piece[data-type="1"] { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); border-radius: 0; }
+[data-theme="jewels"] .piece[data-type="2"] { border-radius: 50%; clip-path: none; }
+
+/* Modificaciones de Forma - Tema Cósmico */
+/* type 0 = Estrella ★ */
+[data-theme="cosmic"] .piece[data-type="0"] {
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  border-radius: 0;
+}
+/* type 1 = Sol ☀ — color amarillo dorado + forma dentada */
+[data-theme="cosmic"] .piece[data-type="1"] {
+  background: linear-gradient(135deg, #ffe259, #ffa751);
+  box-shadow: 0 2px 8px rgba(255, 200, 50, 0.55);
+  clip-path: polygon(
+    50% 0%, 56% 18%, 68% 5%, 65% 24%, 82% 18%, 72% 34%,
+    91% 35%, 76% 47%, 91% 56%, 74% 60%, 82% 76%, 65% 71%,
+    68% 90%, 55% 78%, 50% 97%, 45% 78%, 32% 90%, 35% 71%,
+    18% 76%, 26% 60%, 9% 56%, 24% 47%, 9% 35%, 28% 34%,
+    18% 18%, 35% 24%, 32% 5%, 44% 18%
+  );
+  border-radius: 0;
+}
+/* type 2 = Luna llena 🌕 — círculo plateado azulado */
+[data-theme="cosmic"] .piece[data-type="2"] {
+  background: linear-gradient(135deg, #e8eaf6, #90caf9);
+  box-shadow: 0 2px 8px rgba(144, 202, 249, 0.55);
+  clip-path: none;
+  border-radius: 50%;
+}
+
+/* ==========================================================================
+   ASISTENCIA AL USUARIO (CSS POSITION)
+   ========================================================================== */
+.row-indicators {
+  position: absolute;
+  right: 0.4rem;
+  top: 0.4rem;
+  bottom: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  pointer-events: none;
+}
+
+.row-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(30, 41, 59, 0.95);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.row-badge.complete {
+  background: #10b981;
+  color: #fff;
+  border-color: #34d399;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+.row-badge.complete::after { content: '✓'; }
+
+/* ==========================================================================
+   PANEL DE CONFIGURACIÓN (LIMPIO, SIN SOLAPAMIENTOS)
+   ========================================================================== */
+.controls-panel {
+  width: 100%;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.65rem 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.control-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 0 1 auto;
+}
+
+.control-dimension {
+  min-width: 210px;
+  max-width: 260px;
+  flex: 1 1 auto;
+}
+
+.control-size {
+  min-width: 210px;
+}
+
+.control-theme {
+  min-width: 240px;
+  max-width: 340px;
+  flex: 1 1 auto;
+}
+
+.control-btn-wrap {
+  min-width: auto;
+}
+
+.control-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+  line-height: 1.2;
+}
+
+.control-value {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.select-input {
+  width: 100%;
+  background: #0f172a;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  color: #fff;
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.range-input {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+  height: 5px;
+  margin: 0.35rem 0;
+}
+
+/* Control Segmentado */
+.segmented-control {
+  display: flex;
+  background: #0f172a;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2px;
+  gap: 2px;
+  width: 100%;
+}
+
+.btn-segmented {
+  flex: 1;
+  padding: 0.35rem 0.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.btn-segmented:hover {
+  color: var(--text-main);
+}
+
+.btn-segmented.active {
+  background: var(--accent);
+  color: #0f172a;
+  box-shadow: 0 2px 6px rgba(56, 189, 248, 0.35);
+}
+
+/* Botones Generales */
+.btn {
+  padding: 0.45rem 0.9rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: transform 0.15s, opacity 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.95;
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: #0f172a;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.btn-reset {
+  padding: 0.5rem 1.1rem;
+}
+
+/* ==========================================================================
+   MODALES (POSITION FIXED)
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  background: #1e293b;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  max-width: 460px;
+  width: 90%;
+  color: var(--text-main);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
