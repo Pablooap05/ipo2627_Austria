@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CYBER MARIO // Retro Arcade Platformer</title>
+  
+  <!-- Tipografías de Google Fonts: Press Start 2P y Chakra Petch -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  
+  <!-- Hoja de Estilos -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="arcade-app">
+    <!-- Barra Superior / HUD Compacto -->
+    <header class="arcade-hud">
+      <div class="hud-brand">
+        <h1 class="logo-title">CYBER MARIO</h1>
+        <span class="logo-tag">ARCADE</span>
+      </div>
+
+      <!-- Métricas del Juego en Línea -->
+      <div class="hud-stats">
+        <div class="stat-pill">
+          <span class="stat-title">SCORE</span>
+          <span id="currentScore" class="stat-num score-yellow">0</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-title">RECORD</span>
+          <span id="highScore" class="stat-num score-pink">0</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-title">NIVEL</span>
+          <span id="currentLevel" class="stat-num">1</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-title">MONEDAS</span>
+          <span id="coinsLeft" class="stat-num score-yellow">0</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-title">VIDAS</span>
+          <div id="livesContainer" class="lives-box"></div>
+        </div>
+      </div>
+
+      <!-- Selector de Dificultad Mediante Botones Segmentados (Sin Desplegables) -->
+      <div class="difficulty-group">
+        <span class="difficulty-title">DIFICULTAD:</span>
+        <div class="segmented-control" id="difficultySelector">
+          <button type="button" class="seg-btn" data-val="easy">FÁCIL</button>
+          <button type="button" class="seg-btn active" data-val="normal">NORMAL</button>
+          <button type="button" class="seg-btn" data-val="hard">DIFÍCIL</button>
+        </div>
+      </div>
+
+      <!-- Acciones de Cabecera -->
+      <div class="hud-actions">
+        <button id="btnStart" class="btn btn-primary">▶ JUGAR</button>
+        <button id="btnPause" class="btn">⏸ PAUSA</button>
+        <button id="btnReset" class="btn btn-danger">🔄 REINICIAR</button>
+        <button id="btnHelp" class="btn btn-info">❓ AYUDA</button>
+      </div>
+    </header>
+
+    <!-- Escenario Principal del Canvas a Pantalla Completa sin Scroll -->
+    <main class="arcade-stage">
+      <div class="canvas-box">
+        <canvas id="gameCanvas" width="800" height="480"></canvas>
+
+        <!-- Overlay de Inicio -->
+        <div id="startOverlay" class="modal-overlay">
+          <h2 class="modal-title">¿LISTO?</h2>
+          <p class="modal-text">Supera las plataformas con scroll lateral, esquiva o aplasta a los enemigos y alcanza la bandera final.</p>
+          <button id="btnOverlayPlay" class="btn btn-primary btn-overlay-start">COMENZAR PARTIDA</button>
+        </div>
+
+        <!-- Overlay de Pausa -->
+        <div id="pauseOverlay" class="modal-overlay hidden">
+          <h2 class="modal-title">EN PAUSA</h2>
+          <p class="modal-text">Juego pausado. Pulsa 'P' o el botón para continuar la partida.</p>
+          <button id="btnOverlayResume" class="btn btn-primary">REANUDAR</button>
+        </div>
+
+        <!-- Overlay de Game Over -->
+        <div id="gameOverOverlay" class="modal-overlay hidden">
+          <h2 class="modal-title game-over">GAME OVER</h2>
+          <p class="modal-text">Has caído en combate.<br>Puntuación Final: <span id="finalScore" class="final-score-text">0</span></p>
+          <button id="btnOverlayRestart" class="btn btn-danger">JUGAR DE NUEVO</button>
+        </div>
+
+        <!-- Overlay de Victoria -->
+        <div id="victoryOverlay" class="modal-overlay hidden">
+          <h2 class="modal-title victory">¡NIVEL COMPLETADO!</h2>
+          <p class="modal-text">¡Bandera alcanzada con éxito! Has superado el circuito de plataformas.</p>
+          <button id="btnOverlayNextLevel" class="btn btn-primary">SIGUIENTE NIVEL</button>
+        </div>
+      </div>
+
+      <!-- Barra Inferior de Controles Interactivos -->
+      <footer class="arcade-controls-bar">
+        <div class="touch-bar">
+          <button type="button" class="touch-btn" data-act="LEFT">◀ IZQ</button>
+          <button type="button" class="touch-btn touch-btn-jump" data-act="JUMP">▲ SALTAR</button>
+          <button type="button" class="touch-btn" data-act="RIGHT">DER ▶</button>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Modal de Ayuda (Pop-up Flotante) -->
+  <div id="helpModal" class="dialog-modal hidden">
+    <div class="dialog-box">
+      <h2>REGLAS DEL JUEGO <button id="btnCloseHelp" class="btn btn-danger btn-close-modal">✕</button></h2>
+      <div class="dialog-content">
+        <div class="rule-pill">
+          <span class="rule-key">DESPLAZAMIENTO</span>
+          <span>Usa A-D o las Flechas para moverte con aceleración e inercia.</span>
+        </div>
+        <div class="rule-pill">
+          <span class="rule-key">SALTO</span>
+          <span>Barra Espaciadora o W para saltar plataformas y abismos.</span>
+        </div>
+        <div class="rule-pill">
+          <span class="rule-key">GOOMBAS (ENEMIGOS)</span>
+          <span>Salta sobre su cabeza para aplastarlos (+200 pts). Si te tocan de lado pierdes una vida.</span>
+        </div>
+        <div class="rule-pill">
+          <span class="rule-key">ESPINAS Y PRECIPICIOS</span>
+          <span>Esquiva las espinas rojas y calcula bien los saltos para no caer al vacío.</span>
+        </div>
+        <div class="rule-pill">
+          <span class="rule-key">MONEDAS Y BANDERA</span>
+          <span>Recoge las monedas (+100 pts) y llega hasta el mástil con la bandera (+1000 pts) para ganar.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Módulo Principal -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
